@@ -1,6 +1,7 @@
+from __future__ import print_function
+
 import time
 import sys
-from __future__ import print_function
 
 import Adafruit_DHT as DHT
 
