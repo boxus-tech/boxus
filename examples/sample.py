@@ -26,5 +26,5 @@ moisture = arduino.analogRead(15)
 arduino.digitalWrite(5, arduino.LOW)
 
 print 'Temperature %dC' % temperature
-print 'Humidity %d%' % humidity
+print 'Humidity %d\%' % humidity
 print 'Moisture %d' % moisture
