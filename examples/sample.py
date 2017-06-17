@@ -13,17 +13,17 @@ from nanpy import ArduinoApi
 connection = SerialManager(device='/dev/ttyUSB0')
 arduino = ArduinoApi(connection=connection)
 
-arduino.pinMode(15, a.INPUT)
-arduino.pinMode(5, a.OUTPUT)
+arduino.pinMode(15, arduino.INPUT)
+arduino.pinMode(5, arduino.OUTPUT)
 
 # Turn on moisture sensor power
-arduino.digitalWrite(5, a.HIGH)
+arduino.digitalWrite(5, arduino.HIGH)
 
 humidity, temperature = DHT.read_retry(11, 4)
 moisture = arduino.analogRead(15)
 
 # Turn off moisture sensor power
-arduino.digitalWrite(5, a.LOW)
+arduino.digitalWrite(5, arduino.LOW)
 
 print 'Temperature %dC' % temperature
 print 'Humidity %d%' % humidity
