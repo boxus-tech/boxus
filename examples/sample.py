@@ -28,7 +28,8 @@ print('Waiting 5 seconds')
 for i in range(5):
     time.sleep(1)
     sys.stdout.write('.')
-print('\n')
+    sys.stdout.flush()
+print('')
 
 humidity, temperature = DHT.read_retry(11, 4)
 moisture = arduino.analogRead(15)
