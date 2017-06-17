@@ -26,6 +26,7 @@ arduino.digitalWrite(5, arduino.HIGH)
 
 print('Waiting 5 seconds')
 for i in range(5):
+    time.sleep(1)
     sys.stdout.write('.')
 print('\n')
 
