@@ -1,1 +1,4 @@
 nanpy
+couchdb
+pyyaml
+
