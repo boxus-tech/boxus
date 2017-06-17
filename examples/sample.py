@@ -1,3 +1,7 @@
+import time
+import sys
+from __future__ import print_function
+
 import Adafruit_DHT as DHT
 
 from nanpy import SerialManager
@@ -19,12 +23,17 @@ arduino.pinMode(5, arduino.OUTPUT)
 # Turn on moisture sensor power
 arduino.digitalWrite(5, arduino.HIGH)
 
+print('Waiting 5 seconds')
+for i in range(5):
+    sys.stdout.write('.')
+print('\n')
+
 humidity, temperature = DHT.read_retry(11, 4)
 moisture = arduino.analogRead(15)
 
 # Turn off moisture sensor power
 arduino.digitalWrite(5, arduino.LOW)
 
-print 'Temperature %dC' % temperature
-print 'Humidity %d%%' % humidity
-print 'Moisture %d' % moisture
+print('Temperature %dC' % temperature)
+print('Humidity %d%%' % humidity)
+print('Moisture %d' % moisture)
