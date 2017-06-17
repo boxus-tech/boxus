@@ -1,0 +1,27 @@
+sensors:
+  -
+    _id: sensor_1
+    description: DHT11 Temperature and humidity sensor
+    sensor_type: dht
+    control: native
+    measurements:
+      - temperature
+      - humidity
+    pins:
+      input:
+        type: digital
+        number: 4
+  -
+    _id: sensor_2
+    description: Moisture sensor
+    sensor_type: moisture
+    control: arduino
+    measurements:
+      - moisture
+    pins:
+      power:
+        type: digital
+        number: 5
+      input:
+        type: analog
+        number: 15

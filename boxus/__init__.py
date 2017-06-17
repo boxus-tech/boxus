@@ -1,1 +1,3 @@
-from .sensor import *
+from .db import DB
+
+from .sensor import Sensor
