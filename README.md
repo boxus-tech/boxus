@@ -16,5 +16,5 @@ Open automated grow pod project
 
 * Raspberry Pi 3
 * Arduino Nano v3
-* DHT temperature and humidity sensor (DHT 11 tested)
-* Soil moisture sensor
+* DHT digital temperature and humidity sensor (DHT 11 tested)
+* Analog soil moisture sensor
