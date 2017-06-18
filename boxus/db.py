@@ -4,12 +4,13 @@ from couchdb.client import Server
 
 class DB:
 
-    server =    None
-    sensors =   None
-    readings =  None
-    devices =   None
-    
+    server      = None
+    sensors     = None
+    readings    = None
+    devices     = None
+
     config = {
+        # TODO Server credentials are currently not used
         'server': {
           'host':   'localhost',
           'port':   5984
