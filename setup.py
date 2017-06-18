@@ -8,4 +8,5 @@ setup(name='boxus',
       author_email='kondratov.aleksey@gmail.com',
       license='GNU General Public License v3.0',
       packages=['boxus'],
+      install_requires=['nanpy', 'couchdb', 'pyyaml', 'python-crontab'],
       zip_safe=False)
