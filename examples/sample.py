@@ -13,7 +13,7 @@ from nanpy import ArduinoApi
 # DHT11 sensor connected to Raspberry Pi GPIO pin 4 (physical 7)
 # 
 # Moisture power input connected to Arduino Nano digital pin 5,
-# while analog daya output connected to analog pin 1
+# while analog data output connected to Arduino analog pin 1
 
 connection = SerialManager(device='/dev/ttyUSB0')
 arduino = ArduinoApi(connection=connection)
