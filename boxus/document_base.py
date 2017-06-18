@@ -1,9 +1,8 @@
 from datetime import datetime
 
-from couchdb.mapping import Document, TextField, DateTimeField
+from couchdb.mapping import Document, DateTimeField
 
 class DocumentBase(Document):
-    description     = TextField()
     created_at      = DateTimeField()
     updated_at      = DateTimeField()
 

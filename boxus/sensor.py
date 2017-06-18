@@ -14,6 +14,7 @@ from .db            import DB
 from .reading import Reading
 
 class Sensor(DocumentBase):
+    description     = TextField()
     sensor_type     = TextField()
     control         = TextField()
     measurements    = ListField(TextField())
