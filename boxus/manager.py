@@ -39,7 +39,7 @@ class Manager:
         # Current user cron
         user_cron = CronTab(pwd.getpwuid(os.getuid()).pw_name)
 
-        old_jobs = cron.find_comment(CRON_JOB_ID)
+        old_jobs = user_cron.find_comment(CRON_JOB_ID)
         for j in old_jobs:
             user_cron.remove(j)
 
