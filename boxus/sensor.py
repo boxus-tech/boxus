@@ -1,7 +1,10 @@
 import warnings
 import time
 
-import Adafruit_DHT as DHT
+try:
+    import Adafruit_DHT as DHT
+except ImportError:
+    warnings.warn('Please, install Adafruit_DHT from https://github.com/adafruit/Adafruit_Python_DHT in order to use DHT sensors.', Warning)
 
 from couchdb.mapping import TextField, ListField, DictField
 
