@@ -25,3 +25,13 @@ sensors:
       input:
         type: analog
         number: 15
+
+devices:
+  -
+    _id: dev_1
+    description: Main water pump
+    control: native
+    pins:
+      power:
+        type: digital
+        number: -1

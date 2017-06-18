@@ -1,3 +1,8 @@
-development:
+server:
   host: localhost
   port: 5984
+
+schema:
+  sensors_db: sensors
+  readings_db: readings
+  devices_db: devices
