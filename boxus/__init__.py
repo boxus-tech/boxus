@@ -1,3 +1,6 @@
 from .db import DB
 
-from .sensor import Sensor
+from .document_base import DocumentBase
+from .sensor        import Sensor
+from .device        import Device
+from .reading       import Reading

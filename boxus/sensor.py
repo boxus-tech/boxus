@@ -1,4 +1,4 @@
-from couchdb.mapping import Document, TextField, ListField, DictField
+from couchdb.mapping import TextField, ListField, DictField
 
 from .document_base import DocumentBase
 
