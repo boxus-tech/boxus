@@ -1,6 +1,8 @@
 Boxus
 =====
 
+[![PyPI version](https://badge.fury.io/py/boxus.svg)](https://badge.fury.io/py/boxus)
+
 ## About
 Open automated plants grow pod project
 
