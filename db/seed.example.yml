@@ -17,6 +17,7 @@ sensors:
     description: Moisture sensor
     sensor_type: moisture
     control: arduino
+    arduino_port: /dev/ttyUSB0
     measurements:
       - moisture
     pins:

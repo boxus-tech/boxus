@@ -37,6 +37,8 @@ moisture = arduino.analogRead(15)
 # Turn off moisture sensor power
 arduino.digitalWrite(5, arduino.LOW)
 
+connection.close()
+
 print('Temperature %dC' % temperature)
 print('Humidity %d%%' % humidity)
 print('Moisture %d' % moisture)
