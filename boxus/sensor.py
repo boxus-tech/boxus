@@ -1,4 +1,5 @@
 import warnings
+import time
 
 import Adafruit_DHT as DHT
 
