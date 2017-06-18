@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(name='boxus',
       version='0.0.1',
-      description='Open automated grow pod project',
+      description='Open automated plants grow pod project',
       url='https://github.com/ololobus/boxus',
       author='Alexey Kondratov',
       author_email='kondratov.aleksey@gmail.com',

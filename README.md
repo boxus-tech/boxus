@@ -2,7 +2,7 @@ Boxus
 =====
 
 ## About
-Open automated grow pod project
+Open automated plants grow pod project
 
 
 ## Requirements
