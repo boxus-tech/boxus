@@ -1,5 +1,5 @@
-from .db         import DB
-from .db_manager import DBManager
+from .db      import DB
+from .manager import Manager
 
 from .document_base import DocumentBase
 from .sensor        import Sensor

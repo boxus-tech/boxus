@@ -23,6 +23,12 @@ class DocumentBase(Document):
 
         return doc
 
+    @classmethod
+    def all(cls, db):
+        view = db.view('_all_docs')
+
+        return map(lambda d: cls.find(db, d['id']), view)
+
     def save(self):
         if not self.created_at:
             self.created_at = datetime.now()

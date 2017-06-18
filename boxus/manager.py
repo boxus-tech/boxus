@@ -5,7 +5,7 @@ from .db     import DB
 from .device import Device
 from .sensor import Sensor
 
-class DBManager:
+class Manager:
 
     def seed(self, seed_path):
         db = DB()
