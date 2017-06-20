@@ -2,6 +2,8 @@ Boxus
 =====
 
 [![PyPI version](https://badge.fury.io/py/boxus.svg)](https://badge.fury.io/py/boxus)
+[![Code Climate](https://codeclimate.com/github/ololobus/boxus/badges/gpa.svg)](https://codeclimate.com/github/ololobus/boxus)
+[![Issue Count](https://codeclimate.com/github/ololobus/boxus/badges/issue_count.svg)](https://codeclimate.com/github/ololobus/boxus)
 
 ## About
 Open automated plants grow pod project
