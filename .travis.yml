@@ -1,5 +1,7 @@
 language: python
 sudo: enable
+env:
+  - CODECLIMATE_REPO_TOKEN=38ca8bc1084e663f84a1cb60ad17533271122412b42eb45c1dd679c81bfab177
 python:
   - 2.7
   - 3.5
@@ -10,4 +12,7 @@ install:
   - pip install -r requirements.txt
   - pip install -r requirements.dev.txt
   - pip install -e .
-script: pytest -v tests/main_test.py 
+script:
+  - pytest -v tests/main_test.py 
+  - coverage run --source boxus -m py.test
+  - CODECLIMATE_REPO_TOKEN=38ca8bc1084e663f84a1cb60ad17533271122412b42eb45c1dd679c81bfab177 codeclimate-test-reporter
