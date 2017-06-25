@@ -1,0 +1,14 @@
+language: python
+sudo: enable
+python:
+  - "2.7"
+  - "3.6"
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install couchdb
+  - couchdb
+install:
+  - pip install -r requirements.txt
+  - pip install -r requirements.dev.txt
+  - pip install -e .
+script: pytest -v tests/main_test.py 
