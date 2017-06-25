@@ -11,10 +11,9 @@ from couchdb.mapping import TextField, ListField, DictField
 from nanpy import SerialManager
 from nanpy import ArduinoApi
 
-from .document_base import DocumentBase
 from .db            import DB
-
-from .reading import Reading
+from .document_base import DocumentBase
+from .reading       import Reading
 
 class Sensor(DocumentBase):
     description     = TextField()
@@ -22,6 +21,20 @@ class Sensor(DocumentBase):
     control         = TextField()
     measurements    = ListField(TextField())
     pins            = DictField()
+
+    def readings(self):
+        db = DB()
+        db.connect()
+
+        q = db.readings.query('''
+            function(doc) {
+                if(doc.sensor_id && doc.sensor_id == '%s'){
+                    emit([doc.created_at, doc._id], doc);
+                }
+            }
+            ''' % self.id, None, 'javascript', Reading.wrapper)
+
+        return list(q)
 
     def read(self):
         if self.sensor_type == 'dht':

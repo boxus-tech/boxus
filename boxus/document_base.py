@@ -15,6 +15,15 @@ class DocumentBase(Document):
         Document.__init__(self)
 
     @classmethod
+    def wrapper(cls, row):
+        if 'doc' in row:
+            doc = row['doc']
+        else:
+            doc = row['value']
+
+        return cls.wrap(doc)
+
+    @classmethod
     def find(cls, db, doc_id):
         doc = cls.load(db, doc_id)
 
@@ -25,9 +34,13 @@ class DocumentBase(Document):
 
     @classmethod
     def all(cls, db):
-        view = db.view('_all_docs')
+        view = db.view('_all_docs', cls.wrapper, **{ 'include_docs': True })
+        rows = list(view)
 
-        return map(lambda d: cls.find(db, d['id']), view)
+        for row in view:
+            row.db = db
+
+        return rows
 
     def save(self):
         if not self.created_at:
