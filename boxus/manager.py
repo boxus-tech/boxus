@@ -4,8 +4,6 @@ import pwd
 
 from crontab import CronTab
 
-from .db     import DB
-
 from .device import Device
 from .sensor import Sensor
 
@@ -13,15 +11,18 @@ CRON_JOB_ID = 'BOXUS_WATCHDOG_CRON_JOB'
 
 class Manager:
 
-    def seed(self, seed_path):
-        db = DB()
-        db.connect()
+    db = None
 
+    def __init__(self, db = None):
+        if db:
+            self.db = db
+
+    def seed(self, seed_path):
         seed = yaml.load(open(seed_path, 'r').read())
 
         for db_name, cls_name in [['sensors', Sensor], ['devices', Device]]:
             for r in seed[db_name]:
-                new_r = cls_name(getattr(db, db_name))
+                new_r = cls_name(getattr(self.db, db_name))
 
                 for k in r:
                     new_r[k] = r[k]

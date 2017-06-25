@@ -1,0 +1,12 @@
+sensors:
+  -
+    _id: test_sensor_id_1
+    description: Test sensor 1
+  -
+    _id: test_sensor_id_2
+    description: Test sensor 2
+
+devices:
+  -
+    _id: test_dev_1
+    description: Test device 1
