@@ -30,14 +30,10 @@ class DB:
             self.config = yaml.load(open(config_path, 'r').read())
 
     def connect(self):
-        self.sensors    = self.server[self.config['schema']['sensors_db']]
-        self.readings   = self.server[self.config['schema']['readings_db']]
-        self.devices    = self.server[self.config['schema']['devices_db']]
+        for db_name, attr_name in [['sensors_db', 'sensors'], ['readings_db', 'readings'], ['devices_db', 'devices']]:
+            setattr(self, attr_name, self.server[self.config['schema'][db_name]])
 
     def setup(self):
-        if self.config['schema']['sensors_db'] not in self.server:
-            self.server.create(self.config['schema']['sensors_db'])
-        if self.config['schema']['readings_db'] not in self.server:
-            self.server.create(self.config['schema']['readings_db'])
-        if self.config['schema']['devices_db'] not in self.server:
-            self.server.create(self.config['schema']['devices_db'])
+        for db_name in ['sensors_db', 'readings_db', 'devices_db']:
+            if self.config['schema'][db_name] not in self.server:
+                self.server.create(self.config['schema'][db_name])

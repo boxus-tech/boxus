@@ -19,21 +19,14 @@ class Manager:
 
         seed = yaml.load(open(seed_path, 'r').read())
 
-        for s in seed['sensors']:
-            new_s = Sensor(db.sensors)
+        for db_name, cls_name in [['sensors', Sensor], ['devices', Device]]:
+            for r in seed[db_name]:
+                new_r = cls_name(getattr(db, db_name))
 
-            for k in s:
-                new_s[k] = s[k]
+                for k in r:
+                    new_r[k] = r[k]
 
-            new_s.save()
-
-        for d in seed['devices']:
-            new_d = Device(db.devices)
-
-            for k in d:
-                new_d[k] = d[k]
-
-            new_d.save()
+                new_r.save()
 
     def install_cron(self, command, interval):
         # Current user cron
