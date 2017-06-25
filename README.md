@@ -4,6 +4,7 @@ Boxus
 [![PyPI version](https://badge.fury.io/py/boxus.svg)](https://badge.fury.io/py/boxus)
 [![Code Climate](https://codeclimate.com/github/boxus-plants/boxus/badges/gpa.svg)](https://codeclimate.com/github/boxus-plants/boxus)
 [![Issue Count](https://codeclimate.com/github/boxus-plants/boxus/badges/issue_count.svg)](https://codeclimate.com/github/boxus-plants/boxus)
+[![Travis-ci Status](https://travis-ci.org/boxus-plants/boxus.svg?branch=master)](https://travis-ci.org/boxus-plants/boxus)
 
 ## About
 Open automated plants grow pod project
