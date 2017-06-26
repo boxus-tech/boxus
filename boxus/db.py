@@ -2,7 +2,7 @@ import yaml
 
 from couchdb.client import Server
 
-class DB:
+class DB(object):
 
     server      = None
     sensors     = None

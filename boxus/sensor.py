@@ -24,7 +24,6 @@ class Sensor(DocumentBase):
 
     def readings(self):
         db = DB()
-        db.connect()
 
         q = db.readings.query('''
             function(doc) {
@@ -47,7 +46,6 @@ class Sensor(DocumentBase):
 
     def read_dht(self):
         db = DB()
-        db.connect()
 
         humidity, temperature = DHT.read_retry(
             self.pins['input']['dht_version'], 
@@ -62,7 +60,6 @@ class Sensor(DocumentBase):
 
     def read_moisture(self):
         db = DB()
-        db.connect()
 
         connection = SerialManager(device='/dev/ttyUSB0')
         arduino = ArduinoApi(connection=connection)
