@@ -22,14 +22,11 @@ def test_db_setup():
     drop_dbs()
 
     db = DB(conf_path('database.test.yml'))
-    db.setup()
-    db.connect()
 
     assert db.sensors is not None
 
 def test_manager_seed():
     db = DB(conf_path('database.test.yml'))
-    db.connect()
 
     manager = Manager(db)
     manager.seed(conf_path('seed.test.yml'))
@@ -38,7 +35,6 @@ def test_manager_seed():
 
 def test_sensor_create():
     db = DB(conf_path('database.test.yml'))
-    db.connect()
 
     s = Sensor(db.sensors)
     s.description = 'Sensor description'
@@ -50,7 +46,6 @@ def test_sensor_create():
 
 def test_sensor_find_and_destroy():
     db = DB(conf_path('database.test.yml'))
-    db.connect()
 
     s0 = Sensor.find(db.sensors, 'test_sensor_id_0')
     assert s0 is not None
