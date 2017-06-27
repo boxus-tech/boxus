@@ -70,8 +70,8 @@ class Sensor(DocumentBase):
         # Turn on moisture sensor power
         arduino.digitalWrite(self.pins['power']['number'], arduino.HIGH)
 
-        # Wait 5 seconds to stabilize readings
-        time.sleep(5)
+        # Wait a few seconds to stabilize readings
+        time.sleep(3)
         moisture = arduino.analogRead(self.pins['input']['number'])
 
         # Turn off moisture sensor power
