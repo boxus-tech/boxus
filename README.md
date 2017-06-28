@@ -90,7 +90,7 @@ or Linux
 sudo apt-get install couchdb
 ```
 
-### The latest development version
+### The latest development build
 
 ```shell
 git clone https://github.com/boxus-plants/boxus.git
@@ -113,6 +113,9 @@ pip install boxus
 
 ### Software
 
-* CouchDB http://couchdb.apache.org
-* Nanpy Firmware for Arduino Nano https://github.com/nanpy/nanpy-firmware
-* Adafruit Python DHT https://github.com/adafruit/Adafruit_Python_DHT
+#### Required
+* [CouchDB](http://couchdb.apache.org)
+
+#### Optional
+* [Nanpy Firmware for Arduino](https://github.com/nanpy/nanpy-firmware) for easy Arduino control and analog sensors support
+* [Adafruit Python DHT library](https://github.com/adafruit/Adafruit_Python_DHT) for reading temperature and humidity data from DHT sesnors connected directly to Raspberry Pi
