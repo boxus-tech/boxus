@@ -8,8 +8,101 @@ Boxus
 [![Test Coverage](https://codeclimate.com/github/boxus-plants/boxus/badges/coverage.svg)](https://codeclimate.com/github/boxus-plants/boxus/coverage)
 
 ## About
-Open automated plants grow pod project
+Inspired by Ruby on Rails and powered by [Nanpy](https://github.com/nanpy/) framework for easy controlling of multiple devices connected to the Raspberry Pi and Arduino via GPIO. Core of the automated plants grow pod DIY open project.
 
+Currently supported out of the box sensors:
+* DHT digital temperature and humidity sensor (DHT11 tested)
+* Analog soil moisture sensor
+
+Use declarative YAML syntax to specify how your sensors and devices are connected, e.g.:
+```yaml
+sensors:
+  -
+    _id: sensor_1
+    description: DHT11 Temperature and humidity sensor
+    sensor_type: dht
+    control: native
+    measurements:
+      - temperature
+      - humidity
+    pins:
+      input:
+        type: digital
+        number: 4
+        dht_version: 11
+  -
+    _id: sensor_2
+    description: Moisture sensor
+    sensor_type: moisture
+    control: arduino
+    arduino_port: /dev/ttyUSB0
+    measurements:
+      - moisture
+    pins:
+      power:
+        type: digital
+        number: 5
+      input:
+        type: analog
+        number: 15
+```
+
+Put all seed info into the `yml` file (see e.g. [seed.example.yml](examples/db/seed.example.yml)) and use `Manager` class to import it into the `CouchDB`:
+```python
+from boxus import DB, Manager
+
+db = DB()
+
+manager = Manager(db)
+manager.seed('seed.yml')
+```
+
+Then easily read your sensors and save data into the `CouchDB`
+```python
+from boxus import DB, Sensor
+
+db = DB()
+
+sensors = Sensor.all(db.sensors)
+
+for s in sensors:
+    s.read()
+```
+or create a watchdog script (see [example](examples/watchdog.py)) and install CRON job using `Manager`:
+```python
+from boxus import Manager
+
+manager = Manager(db)
+# E.g. every 10 minutes
+manager.install_cron('/path/to/python /path/to/watchdog.py', 10)
+```
+
+## Installation
+
+### Requirements
+
+MacOS
+```shell
+brew install couchdb
+```
+or Linux
+```shell
+sudo apt-get install couchdb
+```
+
+### The latest development version
+
+```shell
+git clone https://github.com/boxus-plants/boxus.git
+cd boxus
+pip install -e .
+```
+
+### The latest stable release
+
+```shell
+pip install boxus
+```
 
 ## Requirements
 
@@ -17,8 +110,6 @@ Open automated plants grow pod project
 
 * Raspberry Pi 3
 * Arduino Nano v3
-* DHT digital temperature and humidity sensor (DHT11 tested)
-* Analog soil moisture sensor
 
 ### Software
 

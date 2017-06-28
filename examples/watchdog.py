@@ -1,8 +1,6 @@
-from boxus import DB
-from boxus import Sensor
+from boxus import DB, Sensor
 
 db = DB()
-db.connect()
 
 sensors = Sensor.all(db.sensors)
 
