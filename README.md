@@ -54,7 +54,7 @@ from boxus import DB, Manager
 db = DB()
 
 manager = Manager(db)
-manager.seed('seed.yml')
+manager.seed('/path/to/seed.yml')
 ```
 
 Then easily read your sensors and save data into the `CouchDB`
@@ -68,11 +68,11 @@ sensors = Sensor.all(db.sensors)
 for s in sensors:
     s.read()
 ```
-or create a watchdog script (see [example](examples/watchdog.py)) and install CRON job using `Manager`:
+or create a watchdog script (see [watchdog.py example](examples/watchdog.py)) and install CRON job using `Manager`:
 ```python
 from boxus import Manager
 
-manager = Manager(db)
+manager = Manager()
 # E.g. every 10 minutes
 manager.install_cron('/path/to/python /path/to/watchdog.py', 10)
 ```
@@ -108,11 +108,11 @@ pip install boxus
 
 ### Hardware
 
-* Raspberry Pi 3
-* Arduino Nano v3
+* Raspberry Pi (Pi 3 tested)
+* Arduino (Nano v3 tested)
 
 ### Software
 
+* CouchDB http://couchdb.apache.org
 * Nanpy Firmware for Arduino Nano https://github.com/nanpy/nanpy-firmware
 * Adafruit Python DHT https://github.com/adafruit/Adafruit_Python_DHT
-* CouchDB http://couchdb.apache.org
