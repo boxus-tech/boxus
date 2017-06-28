@@ -8,7 +8,7 @@ Boxus
 [![Test Coverage](https://codeclimate.com/github/boxus-plants/boxus/badges/coverage.svg)](https://codeclimate.com/github/boxus-plants/boxus/coverage)
 
 ## About
-Inspired by Ruby on Rails ActiveRecord and powered by [Nanpy](https://github.com/nanpy/) high-level framework for easy controlling of multiple devices connected to the Raspberry Pi and Arduino via GPIO. Core of the open DIY project of building automated plants grow pod.
+Inspired by Ruby on Rails ActiveRecord and powered by [Nanpy](https://github.com/nanpy/) high-level framework for easy control of multiple devices connected to the Raspberry Pi and Arduino via GPIO. Core of the open DIY project of building automated plants grow pod.
 
 Currently supported out of the box sensors:
 * DHT digital temperature and humidity sensor (DHT11 tested)
