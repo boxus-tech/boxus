@@ -64,14 +64,14 @@ def test_sensor_read():
     result = s1.read()
     assert result is None
 
-def test_sensor_save_readings():
-    db = DB(conf_path('database.test.yml'))
-
-    s1 = Sensor.find(db.sensors, 'test_sensor_id_1')
-    s1.save_readings([1, 2])
-
-    readings = s1.readings()
-    assert len(readings) == 1
+# def test_sensor_save_readings():
+#     db = DB(conf_path('database.test.yml'))
+#
+#     s1 = Sensor.find(db.sensors, 'test_sensor_id_1')
+#     s1.save_readings([1, 2])
+#
+#     readings = s1.readings()
+#     assert len(readings) == 1
 
 def test_drop_dbs():
     drop_dbs()
