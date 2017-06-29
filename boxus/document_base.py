@@ -18,8 +18,10 @@ class DocumentBase(Document):
     def wrapper(cls, row):
         if 'doc' in row:
             doc = row['doc']
-        else:
+        elif 'value' in row:
             doc = row['value']
+        else:
+            doc = row
 
         return cls.wrap(doc)
 
@@ -41,6 +43,9 @@ class DocumentBase(Document):
             row.db = db
 
         return rows
+
+    def doc_db(self):
+        raise NotImplementedError('Method should be defined in the child class.')
 
     def save(self):
         if not self.created_at:

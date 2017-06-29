@@ -20,7 +20,7 @@ sensors:
   -
     _id: sensor_1
     description: DHT11 Temperature and humidity sensor
-    sensor_type: dht
+    type_name: dht
     control: native
     measurements:
       - temperature
@@ -33,7 +33,7 @@ sensors:
   -
     _id: sensor_2
     description: Moisture sensor
-    sensor_type: moisture
+    type_name: moisture
     control: arduino
     arduino_port: /dev/ttyUSB0
     measurements:

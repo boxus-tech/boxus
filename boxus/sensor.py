@@ -2,25 +2,33 @@ import warnings
 import time
 
 try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    warnings.warn('Please, install RPi.GPIO library', Warning)
+
+try:
     import Adafruit_DHT as DHT
 except ImportError:
     warnings.warn('Please, install Adafruit_DHT from https://github.com/adafruit/Adafruit_Python_DHT in order to use DHT sensors.', Warning)
 
 from couchdb.mapping import TextField, ListField, DictField
 
-from nanpy import SerialManager
-from nanpy import ArduinoApi
-
 from .db            import DB
-from .document_base import DocumentBase
+from .controllable  import Controllable
 from .reading       import Reading
 
-class Sensor(DocumentBase):
+class Sensor(Controllable):
     description     = TextField()
-    sensor_type     = TextField()
-    control         = TextField()
     measurements    = ListField(TextField())
-    pins            = DictField()
+
+    # DEPRECATED Use type_name instead
+    sensor_type     = TextField()
+
+    supported_types = [
+        'generic',
+        'dht',
+        'moisture'
+    ]
 
     def readings(self):
         db = DB()
@@ -35,53 +43,72 @@ class Sensor(DocumentBase):
 
         return list(q)
 
-    def read(self):
-        if self.sensor_type == 'dht':
-            return self.read_dht()
-        elif self.sensor_type == 'moisture':
-            return self.read_moisture()
-        else:
-            warnings.warn('Readings for this sensor type (%s) are not yet implemented' % self.sensor_type, FutureWarning)
-            return None
-
-    def read_dht(self):
+    def save_readings(self, values):
         db = DB()
-
-        humidity, temperature = DHT.read_retry(
-            self.pins['input']['dht_version'], 
-            self.pins['input']['number'])
 
         r = Reading(db.readings)
         r.sensor_id = self.id
-        r.values = [temperature, humidity]
+        r.values = values
         r.save()
+
+        return True
+
+    def read(self):
+        if self.check_type() and self.check_control():
+            return getattr(self, 'read_%s' % self.sensor_type)()
+        else:
+            return None
+
+    def read_generic(self):
+        value = None
+
+        if self.control == 'native':
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setup(self.pins['input']['number'], GPIO.IN)
+
+            value = GPIO.input(self.pins['input']['number'])
+
+        elif self.control == 'arduino':
+            with self.arduino_api_scope() as api:
+                api.pinMode(self.pins['input']['number'], api.INPUT)
+
+                if self.pins['input']['type'] == 'analog':
+                    value = api.analogRead(self.pins['input']['number'])
+                elif self.pins['input']['type'] == 'digital':
+                    value = api.digitalRead(self.pins['input']['number'])
+
+        if value:
+            self.save_readings([value])
+
+        return value
+
+    def read_dht(self):
+        humidity, temperature = DHT.read_retry(
+                self.pins['input']['dht_version'], 
+                self.pins['input']['number']
+            )
+
+        self.save_readings([temperature, humidity])
 
         return temperature, humidity
 
     def read_moisture(self):
-        db = DB()
+        moisture = None
 
-        connection = SerialManager(device='/dev/ttyUSB0')
-        arduino = ArduinoApi(connection=connection)
+        with self.arduino_api_scope() as api:
+            api.pinMode(self.pins['input']['number'], api.INPUT)
+            api.pinMode(self.pins['power']['number'], api.OUTPUT)
 
-        arduino.pinMode(self.pins['input']['number'], arduino.INPUT)
-        arduino.pinMode(self.pins['power']['number'], arduino.OUTPUT)
+            # Turn on moisture sensor power
+            api.digitalWrite(self.pins['power']['number'], api.HIGH)
 
-        # Turn on moisture sensor power
-        arduino.digitalWrite(self.pins['power']['number'], arduino.HIGH)
+            # Wait a few seconds to stabilize readings
+            time.sleep(3)
+            moisture = api.analogRead(self.pins['input']['number'])
 
-        # Wait a few seconds to stabilize readings
-        time.sleep(3)
-        moisture = arduino.analogRead(self.pins['input']['number'])
+            # Turn off moisture sensor power
+            api.digitalWrite(self.pins['power']['number'], api.LOW)
 
-        # Turn off moisture sensor power
-        arduino.digitalWrite(self.pins['power']['number'], arduino.LOW)
-
-        connection.close()
-
-        r = Reading(db.readings)
-        r.sensor_id = self.id
-        r.values = [moisture]
-        r.save()
+        self.save_readings([moisture])
 
         return moisture

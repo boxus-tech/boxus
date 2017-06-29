@@ -55,5 +55,14 @@ def test_sensor_find_and_destroy():
     s1 = Sensor.find(db.sensors, 'test_sensor_id_0')
     assert s1 is None
 
+def test_sensor_read():
+    db = DB(conf_path('database.test.yml'))
+
+    s1 = Sensor.find(db.sensors, 'test_sensor_id_1')
+    assert s1 is not None
+
+    result = s1.read()
+    assert result is None
+
 def test_drop_dbs():
     drop_dbs()
