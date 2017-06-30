@@ -16,3 +16,9 @@ class Device(Controllable):
 
     def off(self):
         return self.send_control_squence('off', self.type_name, False)
+
+    def on_generic(self):
+        self.digital_out(self.pins['power']['number'], 1)
+
+    def off_generic(self):
+        self.digital_out(self.pins['power']['number'], 0)

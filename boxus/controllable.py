@@ -41,7 +41,10 @@ class Controllable(DocumentBase):
         if self.control in self.supported_control_types:
             return True
         else:
-            warnings.warn('Devices and sensors should be connected directly to Raspberry Pi or via slave Arduino', Warning)
+            warnings.warn('''
+                Devices and sensors should be connected directly 
+                to Raspberry Pi (control="native") or 
+                via slave Arduino (control="arduino")''', Warning)
             return False
 
     def send_control_sequence(self, prefix, postfix, return_on_fail=None):
@@ -49,3 +52,18 @@ class Controllable(DocumentBase):
             getattr(self, '%s_%s' % (prefix, postfix))()
         else:
             return return_on_fail
+
+    def digital_out(self, pin, val):
+        if self.control == 'native':
+            value = GPIO.HIGH if val == 1 else GPIO.LOW
+
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setup(pin, GPIO.OUT)
+            GPIO.output(pin, value)
+
+        elif self.control == 'arduino':
+            with self.arduino_api_scope() as api:
+                value = api.HIGH if val == 1 else api.LOW
+
+                api.pinMode(pin, api.OUTPUT)
+                api.digitalWrite(pin, value)
