@@ -2,6 +2,9 @@ import yaml
 
 from couchdb.client import Server
 
+from .device import Device
+from .sensor import Sensor
+
 class DB(dict):
 
     server      = None
@@ -52,3 +55,15 @@ class DB(dict):
         for db_name in ['sensors_db', 'readings_db', 'devices_db']:
             if self.config['schema'][db_name] not in self.server:
                 self.server.create(self.config['schema'][db_name])
+
+    def seed(self, seed_path):
+        seed = yaml.load(open(seed_path, 'r').read())
+
+        for db_name, Cls in [['sensors', Sensor], ['devices', Device]]:
+            for r in seed[db_name]:
+                new_r = Cls(self)
+
+                for k in r:
+                    new_r[k] = r[k]
+
+                new_r.save()

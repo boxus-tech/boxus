@@ -1,4 +1,4 @@
-from couchdb.mapping import TextField, DictField
+from couchdb.mapping import TextField
 
 from .controllable import Controllable
 

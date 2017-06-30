@@ -28,8 +28,7 @@ def test_db_setup():
 def test_manager_seed():
     db = DB(conf_path('database.test.yml'))
 
-    manager = Manager(db)
-    manager.seed(conf_path('seed.test.yml'))
+    db.seed(conf_path('seed.test.yml'))
 
     assert len(Sensor.all(db)) == 2
 

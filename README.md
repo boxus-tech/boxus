@@ -47,14 +47,12 @@ sensors:
         number: 15
 ```
 
-Put all seed info into the `yml` file (see e.g. [seed.example.yml](examples/db/seed.example.yml)) and use `Manager` class to import it into the `CouchDB`:
+Put all seed info into the `yml` file (see e.g. [seed.example.yml](examples/db/seed.example.yml)) and use `DB` class to import it into the `CouchDB`:
 ```python
-from boxus import DB, Manager
+from boxus import DB
 
 db = DB()
-
-manager = Manager(db)
-manager.seed('/path/to/seed.yml')
+db.seed('/path/to/seed.yml')
 ```
 
 Then easily read your sensors and save data into the `CouchDB`

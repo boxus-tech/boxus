@@ -1,19 +1,18 @@
 import warnings
 import time
 
+# Platform-specific modules
 try:
     import RPi.GPIO as GPIO
 except ImportError:
     warnings.warn('Please, install RPi.GPIO library', Warning)
-
 try:
     import Adafruit_DHT as DHT
 except ImportError:
     warnings.warn('Please, install Adafruit_DHT from https://github.com/adafruit/Adafruit_Python_DHT in order to use DHT sensors.', Warning)
 
-from couchdb.mapping import TextField, ListField, DictField
+from couchdb.mapping import TextField, ListField
 
-from .db            import DB
 from .controllable  import Controllable
 from .reading       import Reading
 
