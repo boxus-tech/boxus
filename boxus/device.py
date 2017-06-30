@@ -6,7 +6,8 @@ class Device(Controllable):
     description = TextField()
 
     supported_types = [
-        'generic'
+        'generic',
+        'relay'
     ]
 
     db_name = 'devices'
@@ -22,3 +23,9 @@ class Device(Controllable):
 
     def off_generic(self):
         self.digital_out(self.pins['power']['number'], 0)
+
+    def on_relay(self):
+        self.digital_out(self.pins['power']['number'], 0)
+
+    def off_relay(self):
+        self.digital_out(self.pins['power']['number'], 1)
