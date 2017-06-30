@@ -35,7 +35,7 @@ class Sensor(Controllable):
                     emit([doc.created_at, doc._id], doc);
                 }
             }
-            ''' % self.id, None, 'javascript', Reading.wrapper)
+            ''' % self.id, None, 'javascript', Reading._wrapper)
 
         return list(q)
 
@@ -48,9 +48,9 @@ class Sensor(Controllable):
         return True
 
     def read(self):
-        self.send_control_sequence('read', self.type_name)
+        return self._send_control_sequence('read', self.type_name)
 
-    def read_generic(self):
+    def _read_generic(self):
         value = None
 
         if self.control == 'native':
@@ -73,7 +73,7 @@ class Sensor(Controllable):
 
         return value
 
-    def read_dht(self):
+    def _read_dht(self):
         humidity, temperature = DHT.read_retry(
                 self.pins['input']['dht_version'], 
                 self.pins['input']['number']
@@ -83,7 +83,7 @@ class Sensor(Controllable):
 
         return temperature, humidity
 
-    def read_moisture(self):
+    def _read_moisture(self):
         moisture = None
 
         with self.arduino_api_scope() as api:

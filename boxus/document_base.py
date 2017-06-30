@@ -16,7 +16,7 @@ class DocumentBase(Document):
         Document.__init__(self)
 
     @classmethod
-    def wrapper(cls, row):
+    def _wrapper(cls, row):
         if 'doc' in row:
             doc = row['doc']
         elif 'value' in row:
@@ -37,7 +37,7 @@ class DocumentBase(Document):
 
     @classmethod
     def all(cls, db):
-        view = db[cls.db_name].view('_all_docs', cls.wrapper, **{ 'include_docs': True })
+        view = db[cls.db_name].view('_all_docs', cls._wrapper, **{ 'include_docs': True })
         rows = list(view)
 
         for row in view:

@@ -30,14 +30,14 @@ class Controllable(DocumentBase):
         finally:
             connection.close()
 
-    def check_type(self):
+    def _check_type(self):
         if self.type_name in self.supported_types:
             return True
         else:
             warnings.warn('Control of "%s" type are not yet implemented' % self.type_name, FutureWarning)
             return False
 
-    def check_control(self):
+    def _check_control(self):
         if self.control in self.supported_control_types:
             return True
         else:
@@ -47,13 +47,13 @@ class Controllable(DocumentBase):
                 via slave Arduino (control="arduino")''', Warning)
             return False
 
-    def send_control_sequence(self, prefix, postfix, return_on_fail=None):
-        if self.check_type() and self.check_control():
-            getattr(self, '%s_%s' % (prefix, postfix))()
+    def _send_control_sequence(self, prefix, postfix, return_on_fail=None):
+        if self._check_type() and self._check_control():
+            getattr(self, '_%s_%s' % (prefix, postfix))()
         else:
             return return_on_fail
 
-    def digital_out(self, pin, val):
+    def _digital_out(self, pin, val):
         if self.control == 'native':
             value = GPIO.HIGH if val == 1 else GPIO.LOW
 
