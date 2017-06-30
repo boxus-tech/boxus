@@ -30,10 +30,10 @@ class Sensor(Controllable):
         'moisture'
     ]
 
-    def readings(self):
-        db = DB()
+    db_name = 'sensors'
 
-        q = db.readings.query('''
+    def readings(self):
+        q = self.db.readings.query('''
             function(doc) {
                 if(doc.sensor_id && doc.sensor_id == '%s'){
                     emit([doc.created_at, doc._id], doc);
@@ -44,9 +44,7 @@ class Sensor(Controllable):
         return list(q)
 
     def save_readings(self, values):
-        db = DB()
-
-        r = Reading(db.readings)
+        r = Reading(self.db)
         r.sensor_id = self.id
         r.values = values
         r.save()

@@ -7,6 +7,7 @@ class DocumentBase(Document):
     updated_at      = DateTimeField()
 
     db = None
+    db_name = None
 
     def __init__(self, db = None):
         if db:
@@ -27,7 +28,7 @@ class DocumentBase(Document):
 
     @classmethod
     def find(cls, db, doc_id):
-        doc = cls.load(db, doc_id)
+        doc = cls.load(db[cls.db_name], doc_id)
 
         if doc:
             doc.db = db
@@ -36,7 +37,7 @@ class DocumentBase(Document):
 
     @classmethod
     def all(cls, db):
-        view = db.view('_all_docs', cls.wrapper, **{ 'include_docs': True })
+        view = db[cls.db_name].view('_all_docs', cls.wrapper, **{ 'include_docs': True })
         rows = list(view)
 
         for row in view:
@@ -44,16 +45,13 @@ class DocumentBase(Document):
 
         return rows
 
-    def doc_db(self):
-        raise NotImplementedError('Method should be defined in the child class.')
-
     def save(self):
         if not self.created_at:
             self.created_at = datetime.now()
         else:
             self.updated_at = datetime.now()
 
-        self.store(self.db)
+        self.store(self.db[self.db_name])
 
     def destroy(self):
-        self.db.delete(self)
+        self.db[self.db_name].delete(self)

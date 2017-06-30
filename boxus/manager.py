@@ -20,9 +20,9 @@ class Manager:
     def seed(self, seed_path):
         seed = yaml.load(open(seed_path, 'r').read())
 
-        for db_name, cls_name in [['sensors', Sensor], ['devices', Device]]:
+        for db_name, Cls in [['sensors', Sensor], ['devices', Device]]:
             for r in seed[db_name]:
-                new_r = cls_name(getattr(self.db, db_name))
+                new_r = Cls(self.db)
 
                 for k in r:
                     new_r[k] = r[k]

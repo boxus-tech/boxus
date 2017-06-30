@@ -9,6 +9,8 @@ class Device(Controllable):
         'generic'
     ]
 
+    db_name = 'devices'
+
     def on(self):
         if self.check_type() and self.check_control():
             getattr(self, 'on_%s' % self.type_name)()
