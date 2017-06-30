@@ -12,7 +12,12 @@ Inspired by Ruby on Rails ActiveRecord and powered by [Nanpy](https://github.com
 
 Currently supported out of the box sensors:
 * DHT digital temperature and humidity sensor (DHT11 tested)
-* Analog soil moisture sensor
+* Analog soil moisture sensor (1. turn on power; 2. read analog input; 3. turn off power in order to minimize galvanic corrosion)
+* Generic (digital and analog reads from one input pin)
+
+and devices:
+* Relay (turned on – `LOW` output state; turned off – default and `HIGH` output states)
+* Generic (turned on – `HIGH` output state; turned off – default and `LOW` output states)
 
 Use declarative YAML syntax to specify how your sensors and devices are connected, e.g.:
 ```yaml
@@ -30,21 +35,18 @@ sensors:
         type: digital
         number: 4
         dht_version: 11
+
+devices:
   -
-    _id: sensor_2
-    description: Moisture sensor
-    type_name: moisture
+    _id: dev_1
+    description: Main water pump
+    type_name: relay
     control: arduino
     arduino_port: /dev/ttyUSB0
-    measurements:
-      - moisture
     pins:
       power:
         type: digital
-        number: 5
-      input:
-        type: analog
-        number: 15
+        number: 4
 ```
 
 Put all seed info into the `yml` file (see e.g. [seed.example.yml](examples/db/seed.example.yml)) and use `DB` class to import it into the `CouchDB`:
@@ -55,7 +57,7 @@ db = DB()
 db.seed('/path/to/seed.yml')
 ```
 
-Then easily read your sensors and save data into the `CouchDB`
+Then easily read all your sensors and save data into the `CouchDB`
 ```python
 from boxus import DB, Sensor
 
@@ -65,6 +67,16 @@ sensors = Sensor.all(db)
 
 for s in sensors:
     s.read()
+```
+turn on/off your devices
+```python
+from boxus import DB, Device
+
+db = DB()
+
+dev = Device.find(db, 'dev_1')
+dev.on()
+dev.off()
 ```
 or create a watchdog script (see [watchdog.py example](examples/watchdog.py)) and install CRON job using `Manager`:
 ```python

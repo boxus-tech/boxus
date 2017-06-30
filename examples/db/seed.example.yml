@@ -32,9 +32,19 @@ devices:
   -
     _id: dev_1
     description: Main water pump
+    type_name: relay
+    control: arduino
+    arduino_port: /dev/ttyUSB0
+    pins:
+      power:
+        type: digital
+        number: 4
+  -
+    _id: dev_2
+    description: Signal LED
     type_name: generic
     control: native
     pins:
       power:
         type: digital
-        number: -1
+        number: 6
