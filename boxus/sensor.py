@@ -21,9 +21,6 @@ class Sensor(Controllable):
     description     = TextField()
     measurements    = ListField(TextField())
 
-    # DEPRECATED Use type_name instead
-    sensor_type     = TextField()
-
     supported_types = [
         'generic',
         'dht',
