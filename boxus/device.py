@@ -12,10 +12,10 @@ class Device(Controllable):
     db_name = 'devices'
 
     def on(self):
-        return self.send_control_squence('on', self.type_name, False)
+        return self.send_control_sequence('on', self.type_name, False)
 
     def off(self):
-        return self.send_control_squence('off', self.type_name, False)
+        return self.send_control_sequence('off', self.type_name, False)
 
     def on_generic(self):
         self.digital_out(self.pins['power']['number'], 1)
