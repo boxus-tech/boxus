@@ -48,10 +48,7 @@ class Sensor(Controllable):
         return True
 
     def read(self):
-        if self.check_type() and self.check_control():
-            return getattr(self, 'read_%s' % self.sensor_type)()
-        else:
-            return None
+        self.send_control_sequence('read', self.type_name)
 
     def read_generic(self):
         value = None

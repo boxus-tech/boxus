@@ -12,13 +12,7 @@ class Device(Controllable):
     db_name = 'devices'
 
     def on(self):
-        if self.check_type() and self.check_control():
-            getattr(self, 'on_%s' % self.type_name)()
-        else:
-            return False
+        return self.send_control_squence('on', self.type_name, False)
 
     def off(self):
-        if self.check_type() and self.check_control():
-            getattr(self, 'off_%s' % self.type_name)()
-        else:
-            return False
+        return self.send_control_squence('off', self.type_name, False)
