@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(name='boxus',
       version='0.0.3',
-      description='Open automated plants grow pod project',
+      description='High-level framework for easy control of multiple devices connected to the Raspberry Pi and Arduino via GPIO',
       url='https://github.com/boxus-plants/boxus',
       download_url='https://pypi.python.org/pypi/boxus',
       author='Alexey Kondratov',
