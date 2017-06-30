@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='boxus',
-      version='0.0.2',
+      version='0.0.3',
       description='Open automated plants grow pod project',
       url='https://github.com/boxus-plants/boxus',
       download_url='https://pypi.python.org/pypi/boxus',
