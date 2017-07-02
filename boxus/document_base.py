@@ -36,8 +36,12 @@ class DocumentBase(Document):
         return doc
 
     @classmethod
+    def all_iter(cls, db):
+        return db[cls.db_name].view('_all_docs', cls._wrapper, **{ 'include_docs': True })
+
+    @classmethod
     def all(cls, db):
-        view = db[cls.db_name].view('_all_docs', cls._wrapper, **{ 'include_docs': True })
+        view = cls.all_iter(db)
         rows = list(view)
 
         for row in view:

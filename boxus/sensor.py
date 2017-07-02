@@ -1,5 +1,6 @@
 import warnings
 import time
+import csv
 
 # Platform-specific modules
 try:
@@ -28,16 +29,23 @@ class Sensor(Controllable):
 
     db_name = 'sensors'
 
-    def readings(self):
-        q = self.db.readings.query('''
-            function(doc) {
-                if(doc.sensor_id && doc.sensor_id == '%s'){
-                    emit([doc.created_at, doc._id], doc);
+    def readings_iter(self):
+        return self.db.readings.query('''
+                function(doc) {
+                    if(doc.sensor_id && doc.sensor_id == '%s'){
+                        emit([doc.created_at, doc._id], doc);
+                    }
                 }
-            }
             ''' % self.id, None, 'javascript', Reading._wrapper)
 
-        return list(q)
+    def readings(self):
+        return list(self.readings_iter())
+
+    def readings_to_csv(self, path):
+        with open(path, 'wb') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
+            for r in self.readings_iter():
+                writer.writerow(map(str, r.values) + [r.created_at])
 
     def save_readings(self, values):
         r = Reading(self.db)
