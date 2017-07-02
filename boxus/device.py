@@ -43,13 +43,13 @@ class Device(Controllable):
         self.off()
 
     def _on_generic(self):
-        self.digital_out(self.pins['power']['number'], 1)
+        self._digital_out(self.pins['power']['number'], 1)
 
     def _off_generic(self):
-        self.digital_out(self.pins['power']['number'], 0)
+        self._digital_out(self.pins['power']['number'], 0)
 
     def _on_relay(self):
-        self.digital_out(self.pins['power']['number'], 0)
+        self._digital_out(self.pins['power']['number'], 0)
 
     def _off_relay(self):
-        self.digital_out(self.pins['power']['number'], 1)
+        self._digital_out(self.pins['power']['number'], 1)
