@@ -72,5 +72,11 @@ def test_sensor_save_readings():
     readings = s1.readings()
     assert len(readings) == 1
 
+def test_sensor_serialize():
+    db = DB(conf_path('database.test.yml'))
+
+    s1 = Sensor.find(db, 'test_sensor_id_1')
+    assert type(s1.to_json()) is str
+
 def test_drop_dbs():
     drop_dbs()
