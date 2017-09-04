@@ -42,14 +42,14 @@ class Controllable(DocumentBase):
             return True
         else:
             warnings.warn('''
-                Devices and sensors should be connected directly 
-                to Raspberry Pi (control="native") or 
+                Devices and sensors should be connected directly
+                to Raspberry Pi (control="native") or
                 via slave Arduino (control="arduino")''', Warning)
             return False
 
     def _send_control_sequence(self, prefix, postfix, return_on_fail=None):
         if self._check_type() and self._check_control():
-            getattr(self, '_%s_%s' % (prefix, postfix))()
+            return getattr(self, '_%s_%s' % (prefix, postfix))()
         else:
             return return_on_fail
 
