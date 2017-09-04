@@ -76,14 +76,14 @@ class Sensor(Controllable):
                 elif self.pins['input']['type'] == 'digital':
                     value = api.digitalRead(self.pins['input']['number'])
 
-        if value:
+        if value is not None:
             self.save_readings([value])
 
         return value
 
     def _read_dht(self):
         humidity, temperature = DHT.read_retry(
-                self.pins['input']['dht_version'], 
+                self.pins['input']['dht_version'],
                 self.pins['input']['number']
             )
 
