@@ -18,7 +18,6 @@ from .controllable  import Controllable
 from .reading       import Reading
 
 class Sensor(Controllable):
-    description     = TextField()
     measurements    = ListField(TextField())
 
     supported_types = [

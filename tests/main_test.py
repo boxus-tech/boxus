@@ -30,7 +30,7 @@ def test_manager_seed():
 
     db.seed(conf_path('seed.test.yml'))
 
-    assert len(Sensor.all(db)) == 2
+    assert len(Sensor.all(db)) == 3
 
 def test_sensor_create():
     db = DB(conf_path('database.test.yml'))
@@ -41,7 +41,7 @@ def test_sensor_create():
     s.save()
 
     assert isinstance(s.created_at, datetime)
-    assert len(Sensor.all(db)) == 3
+    assert len(Sensor.all(db)) == 4
 
 def test_sensor_find_and_destroy():
     db = DB(conf_path('database.test.yml'))
@@ -61,6 +61,17 @@ def test_sensor_read():
     assert s1 is not None
 
     result = s1.read()
+    assert result is None
+
+def test_deactivated_sensor_read():
+    db = DB(conf_path('database.test.yml'))
+
+    s3 = Sensor.find(db, 'test_sensor_id_3')
+    assert s3 is not None
+
+    assert s3._check_status() is False
+
+    result = s3.read()
     assert result is None
 
 def test_sensor_save_readings():

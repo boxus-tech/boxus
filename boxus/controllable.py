@@ -1,7 +1,7 @@
 import warnings
 from contextlib import contextmanager
 
-from couchdb.mapping import TextField, DictField
+from couchdb.mapping import TextField, DictField, BooleanField
 from nanpy import SerialManager
 from nanpy import ArduinoApi
 
@@ -12,6 +12,8 @@ class Controllable(DocumentBase):
     control         = TextField()
     pins            = DictField()
     arduino_port    = TextField()
+    deactivated     = BooleanField()
+    description     = TextField()
 
     supported_control_types = [
         'native',
@@ -29,6 +31,13 @@ class Controllable(DocumentBase):
             yield arduino
         finally:
             connection.close()
+
+    def _check_status(self):
+        if not self.deactivated:
+            return True
+        else:
+            warnings.warn('Controlable device "%s" is deactivated' % self.description, Warning)
+            return False
 
     def _check_type(self):
         if self.type_name in self.supported_types:
@@ -48,7 +57,9 @@ class Controllable(DocumentBase):
             return False
 
     def _send_control_sequence(self, prefix, postfix, return_on_fail=None):
-        if self._check_type() and self._check_control():
+        if self._check_status() and \
+           self._check_type() and \
+           self._check_control():
             return getattr(self, '_%s_%s' % (prefix, postfix))()
         else:
             return return_on_fail

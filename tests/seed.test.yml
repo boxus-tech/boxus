@@ -5,6 +5,10 @@ sensors:
   -
     _id: test_sensor_id_2
     description: Test sensor 2
+  -
+    _id: test_sensor_id_3
+    description: Deactivated test sensor 3
+    deactivated: True
 
 devices:
   -
