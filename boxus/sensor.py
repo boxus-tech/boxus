@@ -12,10 +12,12 @@ try:
 except ImportError:
     warnings.warn('Please, install Adafruit_DHT from https://github.com/adafruit/Adafruit_Python_DHT in order to use DHT sensors.', Warning)
 
-from couchdb.mapping import TextField, ListField
+from couchdb.mapping import TextField, ListField, DateTimeField
+from datetime        import datetime, timedelta
 
 from .controllable  import Controllable
 from .reading       import Reading
+from .utils         import *
 
 class Sensor(Controllable):
     measurements    = ListField(TextField())
@@ -28,17 +30,24 @@ class Sensor(Controllable):
 
     db_name = 'sensors'
 
-    def readings_iter(self):
+    def readings_iter(self, options=dict()):
         return self.db.readings.query('''
                 function(doc) {
                     if(doc.sensor_id && doc.sensor_id == '%s'){
-                        emit([doc.created_at, doc._id], doc);
+                        emit(doc.created_at, doc);
                     }
                 }
-            ''' % self.id, None, 'javascript', Reading._wrapper)
+            ''' % self.id, None, 'javascript', Reading._wrapper, **options)
 
-    def readings(self):
-        return list(self.readings_iter())
+    def readings(self, options=dict()):
+        return list(self.readings_iter(options))
+
+    def readings_for(self, n, units='days', options=dict()):
+        seconds = human_interval_to_seconds(n, units)
+        field = DateTimeField()
+        options['startkey'] = field._to_json(datetime.today() - timedelta(seconds=seconds))
+
+        return self.readings(options)
 
     def readings_to_csv(self, path):
         with open(path, 'wb') as csvfile:

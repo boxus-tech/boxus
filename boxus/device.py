@@ -2,6 +2,7 @@ import time
 from couchdb.mapping import TextField
 
 from .controllable import Controllable
+from .utils        import *
 
 class Device(Controllable):
     description = TextField()
@@ -19,24 +20,14 @@ class Device(Controllable):
     def off(self):
         return self._send_control_sequence('off', self.type_name, False)
 
-    def on_for(self, val, units='seconds'):
+    def on_for(self, n, units='seconds'):
         assert units in [
                 'second', 'seconds',
                 'minute', 'minutes',
-                'hour', 'hours',
-                'day', 'days'
+                'hour',   'hours',
             ]
 
-        delay = 0 # seconds
-
-        if units in ['second', 'seconds']:
-            delay = val
-        elif units in ['minute', 'minutes']:
-            delay = val*60
-        elif units in ['hour', 'hours']:
-            delay = val*60*60
-        elif units in ['day', 'days']:
-            delay = val*60*60*24
+        delay = human_interval_to_seconds(n, units) # seconds
 
         self.on()
         time.sleep(delay)

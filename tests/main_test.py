@@ -2,7 +2,7 @@ import os
 import yaml
 
 from datetime import datetime
-from boxus import DB, Manager, Sensor, Device, Reading
+from boxus import DB, Manager, Sensor, Device, Reading, human_interval_to_seconds
 
 
 ##### Global functions #####
@@ -83,11 +83,20 @@ def test_sensor_save_readings():
     readings = s1.readings()
     assert len(readings) == 1
 
+    readings = s1.readings_for(2, 'days')
+    assert len(readings) == 1
+
 def test_sensor_serialize():
     db = DB(conf_path('database.test.yml'))
 
     s1 = Sensor.find(db, 'test_sensor_id_1')
     assert type(s1.to_json()) is str
+
+def test_utils():
+    assert human_interval_to_seconds(1, 'day')      == 60*60*24
+    assert human_interval_to_seconds(15, 'seconds') == 15
+    assert human_interval_to_seconds(2, 'weeks')    == 60*60*24*7*2
+
 
 def test_drop_dbs():
     drop_dbs()
