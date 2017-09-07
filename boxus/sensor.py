@@ -42,12 +42,14 @@ class Sensor(Controllable):
     def readings(self, options=dict()):
         return list(self.readings_iter(options))
 
+    def readings_since(self, start_date, options=dict()):
+        field = DateTimeField()
+        options['startkey'] = field._to_json(start_date)
+        return self.readings(options)
+
     def readings_for(self, n, units='days', options=dict()):
         seconds = human_interval_to_seconds(n, units)
-        field = DateTimeField()
-        options['startkey'] = field._to_json(datetime.today() - timedelta(seconds=seconds))
-
-        return self.readings(options)
+        return self.readings_since(datetime.today() - timedelta(seconds=seconds), options)
 
     def readings_to_csv(self, path):
         with open(path, 'wb') as csvfile:

@@ -86,6 +86,9 @@ def test_sensor_save_readings():
     readings = s1.readings_for(2, 'days')
     assert len(readings) == 1
 
+    readings = s1.readings_for(0, 'seconds')
+    assert len(readings) == 0
+
 def test_sensor_serialize():
     db = DB(conf_path('database.test.yml'))
 

@@ -61,8 +61,13 @@ class DocumentBase(Document):
     def destroy(self):
         self.db[self.db_name].delete(self)
 
-    def to_dict(self):
-        return self.__dict__['_data']
+    def to_dict(self, only=None):
+        dic = self.__dict__['_data']
+
+        if only:
+            dic = { k: dic[k] for k in only }
+
+        return dic
 
     def to_json(self):
         return json.dumps(self, default=lambda d: d.to_dict(), sort_keys=True)
