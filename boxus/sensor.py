@@ -44,7 +44,7 @@ class Sensor(Controllable):
 
     def readings_since(self, start_date, options=dict()):
         field = DateTimeField()
-        if options['descending']:
+        if 'descending' in options and options['descending']:
             options['endkey'] = field._to_json(start_date)
         else:
             options['startkey'] = field._to_json(start_date)
