@@ -68,8 +68,13 @@ class Sensor(Controllable):
 
         return True
 
-    def read(self):
-        return self._send_control_sequence('read', self.type_name)
+    def read(self, save=False):
+        values = self._send_control_sequence('read', self.type_name)
+
+        if save and values is not None:
+            self.save_readings(values)
+
+        return values
 
     def _read_generic(self):
         value = None
@@ -89,9 +94,6 @@ class Sensor(Controllable):
                 elif self.pins['input']['type'] == 'digital':
                     value = api.digitalRead(self.pins['input']['number'])
 
-        if value is not None:
-            self.save_readings([value])
-
         return value
 
     def _read_dht(self):
@@ -99,8 +101,6 @@ class Sensor(Controllable):
                 self.pins['input']['dht_version'],
                 self.pins['input']['number']
             )
-
-        self.save_readings([temperature, humidity])
 
         return temperature, humidity
 
@@ -120,7 +120,5 @@ class Sensor(Controllable):
 
             # Turn off moisture sensor power
             api.digitalWrite(self.pins['power']['number'], api.LOW)
-
-        self.save_readings([moisture])
 
         return moisture
