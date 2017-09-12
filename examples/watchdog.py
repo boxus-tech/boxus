@@ -5,4 +5,4 @@ db = DB()
 sensors = Sensor.all(db)
 
 for s in sensors:
-    s.read()
+    s.read(True)
