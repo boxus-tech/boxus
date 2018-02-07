@@ -1,0 +1,3 @@
+# List of Raspberrry Pi hosts
+[pi_hosts]
+pi.eth ansible_ssh_pipelining=True

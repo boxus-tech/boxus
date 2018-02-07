@@ -1,0 +1,85 @@
+# Ansible playbook for RaspberryPi boxus host setup
+---
+- hosts: pi_hosts
+  # vars:
+  #   http_port: 80
+  #   max_clients: 200
+  remote_user: "{{ ansible_ssh_user }}"
+
+  vars_prompt:
+  - name: ansible_ssh_user
+    prompt: Raspberry Pi SSH username?
+  # - name: ansible_ssh_pass
+  #   prompt: SSH user password?
+
+  tasks:
+
+##### System-wide preparations
+
+  - name: Make sure we have a 'wheel' group
+    become: yes
+    group:
+      name: wheel
+      state: present
+
+  - name: Allow 'wheel' group to have passwordless sudo
+    become: yes
+    lineinfile:
+      dest: /etc/sudoers
+      state: present
+      regexp: '^%wheel'
+      line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+      validate: 'visudo -cf %s'
+
+  - name: Create your local user copy
+    become: yes
+    user:
+      name: "{{ lookup('env', 'USER') }}"
+      groups:
+       - sudo
+       - wheel
+      state: present
+
+  - name: Set authorized key took from file
+    become: yes
+    authorized_key:
+      user: "{{ item }}"
+      state: present
+      key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    with_items:
+      - "{{ ansible_user_id }}"
+      - "{{ lookup('env', 'USER') }}"
+  
+  - name: Install apt-get packages
+    become: yes
+    apt: "pkg={{ item }} state=installed"
+    with_items:
+      - fswebcam
+
+##### PostgreSQL setup
+
+  - name: Install PostgreSQL and dependencies via apt-get
+    become: yes
+    apt: "pkg={{ item }} state=installed"
+    with_items:
+      - postgresql
+      - libpq-dev
+      - postgresql-client
+
+  - name: Install Python requirements
+    pip: "name={{ item }}"
+    with_items:
+      - psycopg2
+    become: yes
+
+  - name: Start PG on boot
+    become: yes
+    service: name=postgresql state=started enabled=yes
+
+  - name: Create PG users
+    postgresql_user: "name={{ item }}"
+    become: yes
+    become_user: postgres
+    with_items:
+      - "{{ ansible_user_id }}"
+      - "{{ lookup('env', 'USER') }}"
