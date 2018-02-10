@@ -2,4 +2,5 @@
 
 DATE=$(date +"%Y-%m-%d_%H%M")
 
-fswebcam -r 1280x720 /home/pi/webcam/$DATE.jpg
+mkdir -p ~/webcam
+fswebcam -r 1280x720 ~/webcam/$DATE.jpg
