@@ -1,4 +1,4 @@
-# Ansible playbook for RaspberryPi boxus host setup
+# Ansible playbook for Raspberry Pi boxus host setup
 ---
 - hosts: pi_hosts
   # vars:
@@ -31,6 +31,13 @@
       line: '%wheel ALL=(ALL) NOPASSWD: ALL'
       validate: 'visudo -cf %s'
 
+  - name: Add user 'pi' to 'gpio' group
+    become: yes
+    user:
+      name: pi
+      groups: gpio
+      append: yes
+
   - name: Create your local user copy
     become: yes
     user:
@@ -38,6 +45,8 @@
       groups:
        - sudo
        - wheel
+       - gpio
+      shell: /bin/bash
       state: present
 
   - name: Set authorized key took from file
@@ -49,12 +58,20 @@
     with_items:
       - "{{ ansible_user_id }}"
       - "{{ lookup('env', 'USER') }}"
-  
+
   - name: Install apt-get packages
     become: yes
     apt: "pkg={{ item }} state=installed"
     with_items:
       - fswebcam
+
+  - name: Copy vim config
+    copy:
+      src: templates/.vimrc
+      dest: /home/pi/
+      owner: pi
+      group: pi
+      mode: 0644
 
 ##### PostgreSQL setup
 
@@ -66,15 +83,30 @@
       - libpq-dev
       - postgresql-client
 
+  - name: Start PG on boot
+    become: yes
+    service: name=postgresql state=started enabled=yes
+
+  # - name: Start PG on boot
+  #   become: yes
+  #   systemd:
+  #     name: postgresql
+  #     enabled: yes
+  #     state: started
+
+  # - name: Just force systemd to reread configs (2.4 and above)
+  #   become: yes
+  #   systemd: daemon_reload=yes
+
+  # - name: Start PG
+  #   become: yes
+  #   service: name=postgresql state=started
+
   - name: Install Python requirements
     pip: "name={{ item }}"
     with_items:
       - psycopg2
     become: yes
-
-  - name: Start PG on boot
-    become: yes
-    service: name=postgresql state=started enabled=yes
 
   - name: Create PG users
     postgresql_user: "name={{ item }}"
