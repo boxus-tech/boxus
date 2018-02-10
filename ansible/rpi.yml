@@ -43,10 +43,7 @@
     become: yes
     user:
       name: "{{ lookup('env', 'USER') }}"
-      groups:
-       - sudo
-       - wheel
-       - gpio
+      groups: sudo, wheel, gpio
       shell: /bin/bash
       state: present
   
@@ -54,8 +51,7 @@
     become: yes
     user:
       name: boxus
-      groups:
-        - gpio
+      groups: gpio, video
       shell: /bin/bash
       state: present
 
