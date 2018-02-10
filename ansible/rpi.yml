@@ -4,11 +4,12 @@
   # vars:
   #   http_port: 80
   #   max_clients: 200
-  remote_user: "{{ ansible_ssh_user }}"
+  # remote_user: "{{ ansible_ssh_user }}"
+  remote_user: pi
 
-  vars_prompt:
-  - name: ansible_ssh_user
-    prompt: Raspberry Pi SSH username?
+  # vars_prompt:
+  # - name: ansible_ssh_user
+  #   prompt: SSH username?
   # - name: ansible_ssh_pass
   #   prompt: SSH user password?
 
@@ -48,6 +49,24 @@
        - gpio
       shell: /bin/bash
       state: present
+  
+  - name: Create 'boxus' user
+    become: yes
+    user:
+      name: boxus
+      groups:
+        - gpio
+      shell: /bin/bash
+      state: present
+
+  - name: Copy vim config to 'boxus'
+    become: yes
+    copy:
+      src: templates/.vimrc
+      dest: /home/boxus/
+      owner: boxus
+      group: boxus
+      mode: 0644
 
   - name: Set authorized key took from file
     become: yes
@@ -65,7 +84,7 @@
     with_items:
       - fswebcam
 
-  - name: Copy vim config
+  - name: Copy vim config to 'pi'
     copy:
       src: templates/.vimrc
       dest: /home/pi/
@@ -75,43 +94,43 @@
 
 ##### PostgreSQL setup
 
-  - name: Install PostgreSQL and dependencies via apt-get
-    become: yes
-    apt: "pkg={{ item }} state=installed"
-    with_items:
-      - postgresql
-      - libpq-dev
-      - postgresql-client
-
-  - name: Start PG on boot
-    become: yes
-    service: name=postgresql state=started enabled=yes
+  # - name: Install PostgreSQL and dependencies via apt-get
+  #   become: yes
+  #   apt: "pkg={{ item }} state=installed"
+  #   with_items:
+  #     - postgresql
+  #     - libpq-dev
+  #     - postgresql-client
 
   # - name: Start PG on boot
   #   become: yes
-  #   systemd:
-  #     name: postgresql
-  #     enabled: yes
-  #     state: started
+  #   service: name=postgresql state=started enabled=yes
 
-  # - name: Just force systemd to reread configs (2.4 and above)
+  # # - name: Start PG on boot
+  # #   become: yes
+  # #   systemd:
+  # #     name: postgresql
+  # #     enabled: yes
+  # #     state: started
+
+  # # - name: Just force systemd to reread configs (2.4 and above)
+  # #   become: yes
+  # #   systemd: daemon_reload=yes
+
+  # # - name: Start PG
+  # #   become: yes
+  # #   service: name=postgresql state=started
+
+  # - name: Install Python requirements
+  #   pip: "name={{ item }}"
+  #   with_items:
+  #     - psycopg2
   #   become: yes
-  #   systemd: daemon_reload=yes
 
-  # - name: Start PG
+  # - name: Create PG users
+  #   postgresql_user: "name={{ item }}"
   #   become: yes
-  #   service: name=postgresql state=started
-
-  - name: Install Python requirements
-    pip: "name={{ item }}"
-    with_items:
-      - psycopg2
-    become: yes
-
-  - name: Create PG users
-    postgresql_user: "name={{ item }}"
-    become: yes
-    become_user: postgres
-    with_items:
-      - "{{ ansible_user_id }}"
-      - "{{ lookup('env', 'USER') }}"
+  #   become_user: postgres
+  #   with_items:
+  #     - "{{ ansible_user_id }}"
+  #     - "{{ lookup('env', 'USER') }}"
