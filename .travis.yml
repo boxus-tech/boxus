@@ -1,13 +1,19 @@
 language: python
 sudo: enable
 env:
-  - CODECLIMATE_REPO_TOKEN=38ca8bc1084e663f84a1cb60ad17533271122412b42eb45c1dd679c81bfab177
+  global:
+    - CODECLIMATE_REPO_TOKEN=38ca8bc1084e663f84a1cb60ad17533271122412b42eb45c1dd679c81bfab177
+    - CC_TEST_REPORTER_ID=ABC123
 python:
   - 2.7
   - 3.5
   - 3.6
 services:
   - couchdb
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 install:
   - pip install -r requirements.txt
   - pip install -r requirements.dev.txt
@@ -16,3 +22,5 @@ script:
   - pytest -v tests/main_test.py 
   - coverage run --source boxus -m py.test
   - codeclimate-test-reporter
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
