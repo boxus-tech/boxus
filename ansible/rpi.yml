@@ -43,7 +43,7 @@
     become: yes
     user:
       name: "{{ lookup('env', 'USER') }}"
-      groups: sudo, wheel, gpio
+      groups: sudo, wheel, gpio, i2c
       shell: /bin/bash
       state: present
   
@@ -51,7 +51,7 @@
     become: yes
     user:
       name: boxus
-      groups: gpio, video
+      groups: gpio, video, i2c
       shell: /bin/bash
       state: present
 
@@ -79,6 +79,10 @@
     apt: "pkg={{ item }} state=installed"
     with_items:
       - fswebcam
+      - vim
+      - tmux
+      - python-smbus
+      - i2c-tools
 
   - name: Copy vim config to 'pi'
     copy:
@@ -87,46 +91,3 @@
       owner: pi
       group: pi
       mode: 0644
-
-##### PostgreSQL setup
-
-  # - name: Install PostgreSQL and dependencies via apt-get
-  #   become: yes
-  #   apt: "pkg={{ item }} state=installed"
-  #   with_items:
-  #     - postgresql
-  #     - libpq-dev
-  #     - postgresql-client
-
-  # - name: Start PG on boot
-  #   become: yes
-  #   service: name=postgresql state=started enabled=yes
-
-  # # - name: Start PG on boot
-  # #   become: yes
-  # #   systemd:
-  # #     name: postgresql
-  # #     enabled: yes
-  # #     state: started
-
-  # # - name: Just force systemd to reread configs (2.4 and above)
-  # #   become: yes
-  # #   systemd: daemon_reload=yes
-
-  # # - name: Start PG
-  # #   become: yes
-  # #   service: name=postgresql state=started
-
-  # - name: Install Python requirements
-  #   pip: "name={{ item }}"
-  #   with_items:
-  #     - psycopg2
-  #   become: yes
-
-  # - name: Create PG users
-  #   postgresql_user: "name={{ item }}"
-  #   become: yes
-  #   become_user: postgres
-  #   with_items:
-  #     - "{{ ansible_user_id }}"
-  #     - "{{ lookup('env', 'USER') }}"

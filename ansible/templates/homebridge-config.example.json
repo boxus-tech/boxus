@@ -1,0 +1,54 @@
+{
+    "bridge": {
+        "name": "RaspberryBridge",
+        "username": "00:00:00:00:00:00",
+        "port": 51826,
+        "pin": "000-00-000"
+    },
+    "description": "Raspberry Pi Homebridge",
+    "accessories": [
+        {
+            "accessory": "Dht",
+            "name": "DHT11 sensor",
+            "name_temperature": "DHT11 Temperature",
+            "name_humidity": "DHT11 Humdity",
+            "gpio": "17",
+            "service": "dht22",
+            "dhtExec": "/home/homebridge/hb/node_modules/homebridge-dht/dht22"
+        },
+        {
+            "accessory": "BME280",
+            "name": "BME280 sensor",
+            "name_temperature": "Temperature",
+            "name_humidity": "Humidity",
+            "options": {
+              "i2cBusNo": 1,
+              "i2cAddress": "0x76"
+            }
+        }
+    ],
+    "platforms": [
+        {
+            "platform": "config",
+            "name": "Config",
+            "port": 8080,
+            "sudo": false
+        },
+        {
+            "platform": "Camera-ffmpeg",
+            "cameras": [
+                {
+                    "name": "Logitech camera",
+                    "videoConfig": {
+                        "source": "-f v4l2 -r 30 -s 1280x720 -i /dev/video0",
+                        "maxStreams": 2,
+                        "maxWidth": 1280,
+                        "maxHeight": 720,
+                        "maxFPS": 30,
+                        "vcodec": "h264_omx"
+                    }
+                }
+            ]
+        }
+    ]
+}

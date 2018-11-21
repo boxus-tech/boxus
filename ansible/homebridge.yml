@@ -1,0 +1,71 @@
+# Ansible playbook for Raspberry Pi Homebridge host setup
+---
+- hosts: pi_hosts
+
+  remote_user: pi
+
+  tasks:
+
+##### Homebridge
+
+  - name: Configure the Yarn APT key
+    become: yes
+    apt_key: url=https://dl.yarnpkg.com/debian/pubkey.gpg
+
+  - name: Add Yarn repository
+    become: yes
+    apt_repository:
+      repo: 'deb https://dl.yarnpkg.com/debian/ stable main'
+      state: present
+
+  - name: Install apt-get packages
+    become: yes
+    apt: "pkg={{ item }} state=installed"
+    with_items:
+      - nodejs
+      - npm
+      - yarn
+      - ffmpeg
+      - fswebcam
+      - pigpio
+      - python-pigpio
+      - python3-pigpio
+
+  - name: Update npm
+    become: yes
+    npm:
+      name: npm
+      global: yes
+
+  - name: Create 'homebridge' user
+    become: yes
+    user:
+      name: homebridge
+      groups: gpio, video, i2c
+      shell: /bin/bash
+      state: present
+
+  - name: Create Homebridge config directory
+    file: 
+      path: /home/homebridge/.homebridge
+      owner: homebridge 
+      group: homebridge 
+      mode: 0755 
+      state: directory
+
+  - name: Copy Homebridge config to homebridge
+    become: yes
+    copy:
+      src: templates/homebridge-config.json
+      dest: /home/homebridge/.homebridge/config.json
+      owner: homebridge
+      group: homebridge
+      mode: 0644
+
+  - name: Create Homebridge working directory
+    file: 
+      path: /home/homebridge/hb
+      owner: homebridge 
+      group: homebridge 
+      mode: 0755 
+      state: directory

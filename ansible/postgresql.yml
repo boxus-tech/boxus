@@ -1,0 +1,50 @@
+# Ansible playbook for Raspberry Pi PostgreSQL host setup
+---
+- hosts: pi_hosts
+
+  remote_user: pi
+
+  tasks:
+
+##### PostgreSQL setup
+
+  - name: Install PostgreSQL and dependencies via apt-get
+    become: yes
+    apt: "pkg={{ item }} state=installed"
+    with_items:
+      - postgresql
+      - libpq-dev
+      - postgresql-client
+
+  - name: Start PG on boot
+    become: yes
+    service: name=postgresql state=started enabled=yes
+
+  - name: Start PG on boot
+    become: yes
+    systemd:
+      name: postgresql
+      enabled: yes
+      state: started
+
+  - name: Just force systemd to reread configs (2.4 and above)
+    become: yes
+    systemd: daemon_reload=yes
+
+  - name: Start PG
+    become: yes
+    service: name=postgresql state=started
+
+  - name: Install Python requirements
+    pip: "name={{ item }}"
+    with_items:
+      - psycopg2
+    become: yes
+
+  - name: Create PG users
+    postgresql_user: "name={{ item }}"
+    become: yes
+    become_user: postgres
+    with_items:
+      - "{{ ansible_user_id }}"
+      - "{{ lookup('env', 'USER') }}"
