@@ -42,9 +42,10 @@
     become: yes
 
   - name: Create PG users
-    postgresql_user: "name={{ item }}"
+    postgresql_user: "name={{ item }} role_attr_flags=NOSUPERUSER,CREATEDB state=present"
     become: yes
     become_user: postgres
     with_items:
       - "{{ ansible_user_id }}"
       - "{{ lookup('env', 'USER') }}"
+      - boxus
