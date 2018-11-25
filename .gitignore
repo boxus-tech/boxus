@@ -4,9 +4,11 @@
 *.ipynb
 
 dist
+venv
 *.egg-info
 .cache
 .coverage
 .vscode
 homebridge-config.json
 ansible/*.retry
+**/__pycache__

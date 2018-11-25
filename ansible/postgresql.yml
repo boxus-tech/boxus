@@ -49,3 +49,8 @@
       - "{{ ansible_user_id }}"
       - "{{ lookup('env', 'USER') }}"
       - boxus
+
+  - name: Create PG databse
+    postgresql_db: "name=boxus owner=boxus state=present"
+    become: yes
+    become_user: postgres

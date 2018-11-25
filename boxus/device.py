@@ -1,18 +1,15 @@
 import time
-from couchdb.mapping import TextField
 
 from .controllable import Controllable
 from .utils        import *
 
 class Device(Controllable):
-    description = TextField()
+    __tablename__ = 'devices'
 
     supported_types = [
         'generic',
         'relay'
     ]
-
-    db_name = 'devices'
 
     def on(self):
         return self._send_control_sequence('on', self.type_name, False)

@@ -1,9 +1,9 @@
 from couchdb.mapping import TextField, ListField, FloatField
 
-from .document_base import DocumentBase
+from .dbase import DBase
 
 class Reading(DocumentBase):
+    __tablename__ = 'readings'
+    
     sensor_id   = TextField()
     values      = ListField(FloatField())
-
-    db_name = 'readings'

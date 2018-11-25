@@ -1,4 +1,7 @@
 nanpy
-couchdb
 pyyaml
 python-crontab
+
+psycopg2-binary
+SQLAlchemy
+alembic

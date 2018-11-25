@@ -24,3 +24,12 @@ def human_interval_to_seconds(val, units):
         result = val*60*60*24*30
 
     return result
+
+def rev_dict(d):
+    return { v: k for k, v in d.items() }
+
+def as_list(arg):
+    if not isinstance(arg, collections.Iterable):
+        return [arg]
+    else:
+        return arg

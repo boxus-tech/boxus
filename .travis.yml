@@ -8,9 +8,13 @@ python:
   - 2.7
   - 3.5
   - 3.6
+branches:
+  only:
+    - master
 services:
-  - couchdb
+  - postgresql
 before_script:
+  - psql -c 'create database boxus;' -U postgres
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
@@ -21,6 +25,6 @@ install:
 script:
   - pytest -v tests/main_test.py 
   - coverage run --source boxus -m py.test
-  - codeclimate-test-reporter
+  # - codeclimate-test-reporter
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

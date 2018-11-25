@@ -1,26 +1,37 @@
 import warnings
 from contextlib import contextmanager
 
-from couchdb.mapping import TextField, DictField, BooleanField
+from sqlalchemy import Column, Integer, Boolean, Text,\
+                       ARRAY, dialects,\
+                       delete, insert, update, select
+
 from nanpy import SerialManager
 from nanpy import ArduinoApi
 
-from .document_base import DocumentBase
+from .dbase import DBase
+from .utils import rev_dict
 
-class Controllable(DocumentBase):
-    type_name       = TextField(default='generic')
-    control         = TextField()
-    pins            = DictField()
-    arduino_port    = TextField()
-    deactivated     = BooleanField()
-    description     = TextField()
+class Controllable(DBase):
+    __abstract__ = True
 
-    supported_control_types = [
-        'native',
-        'arduino'
-    ]
+    type_id = Column(Integer, nullable=False, default=0)
+    control_id= Column(Integer, nullable=False)
+    deactivated = Column(Boolean)
 
-    supported_types = []
+    name = Column(Text, nullable=False)
+    description = Column(Text)
+    arduino_port = Column(Text)
+
+    pins = Column(dialects.postgresql.JSONB)
+
+    supported_control_types = {
+        0: 'native',
+        1: 'arduino'
+    }
+
+    supported_types = {
+        0: 'generic'
+    }
 
     @contextmanager
     def arduino_api_scope(self):
@@ -32,6 +43,22 @@ class Controllable(DocumentBase):
         finally:
             connection.close()
 
+    @property
+    def control(self):
+        return self.supported_control_types[self.type_id]
+
+    @controll.setter
+    def control(self, val):
+        self.control_id = rev_dict(self.supported_control_types)[val]
+
+    @property
+    def type_name(self):
+        return self.supported_types[self.type_id]
+
+    @type_name.setter
+    def type_name(self, val):
+        self.type_id = rev_dict(self.supported_types)[val]
+
     def _check_status(self):
         if not self.deactivated:
             return True
@@ -40,14 +67,14 @@ class Controllable(DocumentBase):
             return False
 
     def _check_type(self):
-        if self.type_name in self.supported_types:
+        if self.type_id in self.supported_types.keys():
             return True
         else:
             warnings.warn('Control of "%s" type are not yet implemented' % self.type_name, FutureWarning)
             return False
 
     def _check_control(self):
-        if self.control in self.supported_control_types:
+        if self.control_id in self.supported_control_types.keys():
             return True
         else:
             warnings.warn('''

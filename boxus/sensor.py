@@ -2,6 +2,8 @@ import warnings
 import time
 import csv
 
+from datetime import datetime, timedelta
+
 # Platform-specific modules
 try:
     import RPi.GPIO as GPIO
@@ -12,23 +14,23 @@ try:
 except ImportError:
     warnings.warn('Please, install Adafruit_DHT from https://github.com/adafruit/Adafruit_Python_DHT in order to use DHT sensors.', Warning)
 
-from couchdb.mapping import TextField, ListField, DateTimeField
-from datetime        import datetime, timedelta
+from sqlalchemy import Column, Integer, ARRAY, dialects,\
+                       delete, insert, update, select
 
 from .controllable  import Controllable
 from .reading       import Reading
 from .utils         import *
 
 class Sensor(Controllable):
-    measurements    = ListField(TextField())
+    __tablename__ = 'sensors'
+
+    measurements = Column(ARRAY(Integer))
 
     supported_types = [
         'generic',
         'dht',
         'moisture'
     ]
-
-    db_name = 'sensors'
 
     def readings_iter(self, options=dict()):
         return self.db.readings.query('''
