@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "homebridge": "^0.4.45",
+    "homebridge-bme280": "^1.2.0",
+    "homebridge-config-ui-x": "^3.9.4",
+    "homebridge-yeelight-wifi": "^1.0.5"
+  }
+}

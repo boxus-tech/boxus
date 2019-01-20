@@ -43,7 +43,7 @@
     become: yes
     user:
       name: "{{ lookup('env', 'USER') }}"
-      groups: sudo, wheel, gpio, i2c
+      groups: sudo, wheel, gpio, i2c, dialout
       shell: /bin/bash
       state: present
   
@@ -51,7 +51,7 @@
     become: yes
     user:
       name: boxus
-      groups: gpio, video, i2c
+      groups: gpio, video, i2c, dialout
       shell: /bin/bash
       state: present
 
