@@ -1,0 +1,51 @@
+# Ansible playbook for Raspberry Pi RTL-SDR host setup
+---
+- hosts: pi_hosts
+
+  remote_user: pi
+
+  tasks:
+
+##### RTL-SDR server
+
+  - name: Install apt-get packages
+    become: yes
+    apt: "pkg={{ item }} state=installed"
+    with_items:
+      - cmake
+      - pkg-config
+      - libusb-1.0-0-dev
+
+  - name: Create 'rtlsdr' user
+    become: yes
+    user:
+      name: rtlsdr
+      shell: /bin/bash
+      state: present
+
+  - name: Clone rtl-sdr repo
+    become: yes
+    git:
+      repo: 'git://git.osmocom.org/rtl-sdr.git'
+      dest: /home/rtlsdr/rtl-sdr
+      accept_hostkey: true
+  
+  - name: Change rtl-sdr dir permissions
+    become: yes
+    file:
+      path: /home/rtlsdr/rtl-sdr
+      owner: rtlsdr
+      group: rtlsdr
+      mode: 0744
+
+  - name: Blacklist the DVB-T Drivers
+    become: yes
+    lineinfile:
+      path: /etc/modprobe.d/blacklist-rtl.conf
+      state: present
+      create: true
+      line: '{{ item }}'
+    with_items:
+      - 'blacklist dvb_usb_rtl28xxu'
+      - 'blacklist rtl2832'
+      - 'blacklist rtl2830'
