@@ -1,0 +1,14 @@
+[Unit]
+Description=Homebridge service
+After=network.target
+
+[Service]
+ExecStart=/home/homebridge/hb/node_modules/.bin/homebridge 2>&1 | tee /home/homebridge/hb/homebridge.log
+WorkingDirectory=/home/homebridge/hb
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=homebridge
+
+[Install]
+WantedBy=multi-user.target

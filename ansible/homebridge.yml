@@ -71,3 +71,16 @@
       group: homebridge 
       mode: 0755 
       state: directory
+
+  - name: Copy Homebridge service
+    become: yes
+    copy:
+      src: templates/homebridge.service
+      dest: /etc/systemd/system/homebridge.service
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Start Homebridge service
+    become: yes
+    service: name=homebridge state=started enabled=yes

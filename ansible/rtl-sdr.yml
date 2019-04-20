@@ -29,11 +29,26 @@
       repo: 'git://git.osmocom.org/rtl-sdr.git'
       dest: /home/rtlsdr/rtl-sdr
       accept_hostkey: true
-  
+
   - name: Change rtl-sdr dir permissions
     become: yes
     file:
       path: /home/rtlsdr/rtl-sdr
+      owner: rtlsdr
+      group: rtlsdr
+      mode: 0744
+
+  - name: Clone dump1090 repo
+    become: yes
+    git:
+      repo: 'https://github.com/antirez/dump1090.git'
+      dest: /home/rtlsdr/dump1090
+      accept_hostkey: true
+  
+  - name: Change dump1090 dir permissions
+    become: yes
+    file:
+      path: /home/rtlsdr/dump1090
       owner: rtlsdr
       group: rtlsdr
       mode: 0744
