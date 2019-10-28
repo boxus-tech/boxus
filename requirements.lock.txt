@@ -46,7 +46,7 @@ python-apt==0.9.3.12
 python-crontab==2.2.2
 python-dateutil==2.6.0
 PyYAML==3.12
-requests==2.4.3
+requests==2.20.0
 RPi.GPIO==0.6.3
 RTIMULib==7.2.1
 scandir==1.5
