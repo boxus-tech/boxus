@@ -1,0 +1,12 @@
+After=network.target
+
+[Service]
+ExecStart=/usr/local/rpiplay -n CatsPlay -b off -a hdmi -vr rpi -ar rpi -l
+WorkingDirectory=/home/homebridge/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
