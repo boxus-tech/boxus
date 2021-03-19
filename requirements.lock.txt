@@ -15,7 +15,7 @@ html5lib==0.999
 ipython==5.3.0
 ipython-genutils==0.2.0
 itsdangerous==0.24
-Jinja2==2.7.3
+Jinja2==2.11.3
 lxkeymap==0.1
 MarkupSafe==0.23
 mcpi==0.1.1
