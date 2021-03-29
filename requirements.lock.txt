@@ -36,7 +36,7 @@ prompt-toolkit==1.0.14
 ptyprocess==0.5.1
 pyasn1==0.1.7
 pygame==1.9.2a0
-Pygments==2.2.0
+Pygments==2.7.4
 pygobject==3.14.0
 pyinotify==0.9.4
 pyOpenSSL==0.13.1
