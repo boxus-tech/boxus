@@ -31,7 +31,7 @@ picraft==1.0
 pifacecommon==4.2.1
 pifacedigitalio==3.1.0
 pigpio==1.35
-Pillow==6.2.0
+Pillow==9.0.0
 prompt-toolkit==1.0.14
 ptyprocess==0.5.1
 pyasn1==0.1.7
